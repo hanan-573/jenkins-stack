@@ -1,0 +1,15 @@
+step 1: folder ma jaey 
+cd jenkins-stack
+
+step 2: project start krna: 
+docker compose up -d
+
+step 3: project stop krnay ky liye: 
+docker compose down
+
+step 4: project restart krnay ky liye: 
+docker compose restart
+
+
+step 5: container status check krnay ky liye: 
+docker compose ps

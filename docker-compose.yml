@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"   # Sirf localhost par expose, Nginx proxy karega
+      - "50000:50000"           # Jenkins agent communication ke liye
+    volumes:
+      - jenkins_home:/var/jenkins_home   # Persistent volume for Jenkins data
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=true
+    networks:
+      - jenkins-net
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: jenkins-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jenkinsdb
+      POSTGRES_USER: jenkinsuser
+      POSTGRES_PASSWORD: Hanannaeem375@   # Ise zaroor change karein
+    volumes:
+      - postgres_data:/var/lib/postgresql/data   # Persistent volume for PostgreSQL
+    networks:
+      - jenkins-net
+    # Port ko host par expose karne ki zaroorat nahi, Jenkins same network se connect karega.
+
+volumes:
+  jenkins_home:
+    driver: local
+  postgres_data:
+    driver: local
+
+networks:
+  jenkins-net:
+    driver: bridge
